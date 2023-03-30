@@ -23,13 +23,13 @@ app.get("/hack", async (req, res) => {
   const url = req.query.url;
   console.log(url);
   const info = await ytdl.getInfo(url);
-  const title = info.videoDetails.title;
-  const thumbnail = info.videoDetails.thumbnails[0].url;
+  const title = info.vivekfyDetails.title;
+  const thumbnail = info.vivekfyDetails.thumbnails[0].url;
   let formats = info.formats;
 
   const audioFormats = ytdl.filterFormats(info.formats, "audioonly");
   // const format = ytdl.chooseFormat(info.formats, { quality: "249" });
-  formats = formats.filter((format) => format.hasVideo === true);
+  formats = formats.filter((format) => format.hasAudio === true);
 
   res.send({ title, thumbnail, audioFormats, formats });
 });
@@ -40,7 +40,7 @@ app.get("/download", async (req, res) => {
   const type = req.query.type;
 
   // const info = await ytdl.getInfo(url);
-  // const title = info.videoDetails.title;
+  // const title = info.vivekfyDetails.title;
 
   res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
   try {
@@ -50,13 +50,13 @@ app.get("/download", async (req, res) => {
   }
 });
 
-app.get("/video", async (req, res) => {
+app.get("/vivekfy", async (req, res) => {
   const url = req.query.url;
   const itag = req.query.itag;
   const type = req.query.type;
 
   const info = await ytdl.getInfo(url);
-  const title = info.videoDetails.title;
+  const title = info.vivekfyDetails.title;
 
   // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
   try {
@@ -73,8 +73,8 @@ app.get('/', async (req, res) => {
             return res.sendStatus(400);
         }
         let info = await ytdl.getInfo(url);
-        console.log(info.videoDetails.title);
-        const title = slugify(info.videoDetails.title, {
+        console.log(info.vivekfyDetails.title);
+        const title = slugify(info.vivekfyDetails.title, {
             replacement: '-',
             remove: /[*+~.()'"!:@]/g,
             lower: true,
