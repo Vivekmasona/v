@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const ytdl = require("ytdl-core");
 const app = express();
-// const fs = require("fs");
+const fs = require("fs");
 
 const corsOptions = {
   origin: "https://vivekfy.netlify.app", // change this origin as your like
@@ -42,12 +42,17 @@ app.get("/download", async (req, res) => {
   // const info = await ytdl.getInfo(url);
   // const title = info.videoDetails.title;
 
-  res.header("Content-Disposition", `attachment;  filename="${title}"`);
+  res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
   try {
-    ytdl(url, { itag }).pipe(res);
-  } catch (err) {
-    console.log(err);
-  }
+    ytdl(url, {
+            format: 'mp3',
+            filter: 'audioonly',
+            quality: 'highest'
+        }).pipe(res);
+
+    } catch (err) {
+        console.error(err);
+    }
 });
 
 app.get("/video", async (req, res) => {
@@ -66,7 +71,7 @@ app.get("/video", async (req, res) => {
   }
 });
 
-app.get('/vivek', async (req, res) => {
+app.get('/', async (req, res) => {
     try {
         var url = req.query.url;
         if (!ytdl.validateURL(url)) {
