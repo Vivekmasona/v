@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const ytdl = require("ytdl-core");
 const app = express();
-const fs = require("fs");
+// const fs = require("fs");
 
 const corsOptions = {
   origin: "https://vivekfy.netlify.app", // change this origin as your like
@@ -28,8 +28,8 @@ app.get("/hack", async (req, res) => {
   let formats = info.formats;
 
   const audioFormats = ytdl.filterFormats(info.formats, "audioonly");
-  const format = ytdl.chooseFormat(info.formats, { quality: "249" });
-  formats = formats.filter((format) => format.hasAudio === true);
+  // const format = ytdl.chooseFormat(info.formats, { quality: "249" });
+  formats = formats.filter((format) => format.hasVideo === true);
 
   res.send({ title, thumbnail, audioFormats, formats });
 });
@@ -39,8 +39,8 @@ app.get("/download", async (req, res) => {
   const itag = req.query.itag;
   const type = req.query.type;
 
-  const info = await ytdl.getInfo(url);
-  const title = info.videoDetails.title;
+  // const info = await ytdl.getInfo(url);
+  // const title = info.videoDetails.title;
 
   res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
   try {
@@ -91,9 +91,9 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.get('*', (req, res) => {
-  res.render('error')
-})
+// app.get('*', (req, res) => {
+//   res.render('error')
+// })
 
 app.listen(port, () => {
   console.log("Running ...");
