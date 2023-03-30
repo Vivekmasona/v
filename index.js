@@ -23,8 +23,8 @@ app.get("/hack", async (req, res) => {
   const url = req.query.url;
   console.log(url);
   const info = await ytdl.getInfo(url);
-  const title = info.vivekfyDetails.title;
-  const thumbnail = info.vivekfyDetails.thumbnails[0].url;
+  const title = info.videoDetails.title;
+  const thumbnail = info.videoDetails.thumbnails[0].url;
   let formats = info.formats;
 
   const audioFormats = ytdl.filterFormats(info.formats, "audioonly");
@@ -40,7 +40,7 @@ app.get("/download", async (req, res) => {
   const type = req.query.type;
 
   // const info = await ytdl.getInfo(url);
-  // const title = info.vivekfyDetails.title;
+  // const title = info.videoDetails.title;
 
   res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
   try {
@@ -50,13 +50,13 @@ app.get("/download", async (req, res) => {
   }
 });
 
-app.get("/vivekfy", async (req, res) => {
+app.get("/video", async (req, res) => {
   const url = req.query.url;
   const itag = req.query.itag;
   const type = req.query.type;
 
   const info = await ytdl.getInfo(url);
-  const title = info.vivekfyDetails.title;
+  const title = info.videoDetails.title;
 
   // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
   try {
@@ -64,31 +64,6 @@ app.get("/vivekfy", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-});
-
-app.get('/', async (req, res) => {
-    try {
-        var url = req.query.url;
-        if (!ytdl.validateURL(url)) {
-            return res.sendStatus(400);
-        }
-        let info = await ytdl.getInfo(url);
-        console.log(info.vivekfyDetails.title);
-        const title = slugify(info.vivekfyDetails.title, {
-            replacement: '-',
-            remove: /[*+~.()'"!:@]/g,
-            lower: true,
-            strict: false
-        });
-        res.header('Content-Disposition', `attachment; filename="${title}.mp4"`);
-        ytdl(url, {
-            format: 'mp4',
-            quality: 'highest'
-        }).pipe(res);
-
-    } catch (err) {
-        console.error(err);
-    }
 });
 
 // app.get('*', (req, res) => {
