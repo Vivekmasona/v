@@ -45,8 +45,8 @@ app.get("/download", async (req, res) => {
   // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasonaa"`);
   try {
     ytdl(url, {
-            format: '22',
-            filter: 'audioonly',
+            format: 'mp4',
+            filter: 'videoonly',
             quality: 'highest'
         }).pipe(res);
 
