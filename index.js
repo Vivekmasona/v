@@ -19,7 +19,7 @@ app.get("/", (res) => {
   res.render("index.html");
 });
 
-app.get("/get", async (req, res) => {
+app.get("/hack", async (req, res) => {
   const url = req.query.url;
   console.log(url);
   const info = await ytdl.getInfo(url);
@@ -27,11 +27,27 @@ app.get("/get", async (req, res) => {
   const thumbnail = info.videoDetails.thumbnails[0].url;
   let formats = info.formats;
 
-  // const audioFormats = ytdl.filterFormats(info.formats, "audioonly");
-  const format = ytdl.chooseFormat(info.formats, { quality: "249" });
+  const audioFormats = ytdl.filterFormats(info.formats, "audioonly");
+  // const format = ytdl.chooseFormat(info.formats, { quality: "249" });
   formats = formats.filter((format) => format.hasAudio === true);
 
   res.send({ title, thumbnail, audioFormats, formats });
+});
+
+app.get("/download", async (req, res) => {
+  const url = req.query.url;
+  const itag = req.query.itag;
+  const type = req.query.type;
+
+  // const info = await ytdl.getInfo(url);
+  // const title = info.videoDetails.title;
+
+  res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  try {
+    ytdl(url, { itag }).pipe(res);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.get("/video", async (req, res) => {
