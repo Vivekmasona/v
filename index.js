@@ -47,7 +47,7 @@ app.get("/download", async (req, res) => {
     ytdl(url, {
             format: 'mp4',
             filter: 'videoonly',
-            quality: 'highest'
+            quality: 'lowest'
         }).pipe(res);
 
     } catch (err) {
