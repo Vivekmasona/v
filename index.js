@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const ytdl = require("ytdl-core");
 const app = express();
-const fs = require("fs");
+// const fs = require("fs");
 
 const corsOptions = {
   origin: "https://vivekfy.netlify.app", // change this origin as your like
@@ -34,7 +34,7 @@ app.get("/hack", async (req, res) => {
   res.send({ title, thumbnail, audioFormats, formats });
 });
 
-app.get("/download", async (req, res) => {
+app.get("/videodl", async (req, res) => {
   const url = req.query.url;
   const itag = req.query.itag;
   const type = req.query.type;
@@ -42,9 +42,67 @@ app.get("/download", async (req, res) => {
   // const info = await ytdl.getInfo(url);
   // const title = info.videoDetails.title;
 
-  res.header('Content-Disposition', `attachment; filename="${title}.mp4"`);
-        ytdl(url, {
-            format: 'mp4',
+  res.header("Content-Disposition", `attachment;  filename="${title}"`);
+  try {
+    ytdl(url, { itag }).pipe(res);
+  } catch (err) {
+    console.log(err);
+  }
+});
+app.get("/audio", async (req, res) => {
+  const url = req.query.url;
+  const itag = req.query.itag;
+  const type = req.query.type;
+
+  // const info = await ytdl.getInfo(url);
+  // const title = info.videoDetails.title;
+
+  // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  try {
+    ytdl(url, {
+            format: 'mp3',
+            filter: 'audioonly',
+            quality: 'highest'
+        }).pipe(res);
+
+    } catch (err) {
+        console.error(err);
+    }
+});
+app.get("/low-audio", async (req, res) => {
+  const url = req.query.url;
+  const itag = req.query.itag;
+  const type = req.query.type;
+
+  // const info = await ytdl.getInfo(url);
+  // const title = info.videoDetails.title;
+
+  // res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  try {
+    ytdl(url, {
+            format: 'mp3',
+            filter: 'audioonly',
+            quality: 'lowest'
+        }).pipe(res);
+
+    } catch (err) {
+        console.error(err);
+    }
+});
+
+app.get("/audiodl", async (req, res) => {
+  const url = req.query.url;
+  const itag = req.query.itag;
+  const type = req.query.type;
+
+  // const info = await ytdl.getInfo(url);
+  // const title = info.videoDetails.title;
+
+  res.header("Content-Disposition", `attachment;  filename="Download from.vivekmasona"`);
+  try {
+    ytdl(url, {
+            format: 'mp3',
+            filter: 'audioonly',
             quality: 'highest'
         }).pipe(res);
 
@@ -67,31 +125,6 @@ app.get("/video", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-});
-
-app.get('/', async (req, res) => {
-    try {
-        var url = req.query.url;
-        if (!ytdl.validateURL(url)) {
-            return res.sendStatus(400);
-        }
-        let info = await ytdl.getInfo(url);
-        console.log(info.videoDetails.title);
-        const title = slugify(info.videoDetails.title, {
-            replacement: '-',
-            remove: /[*+~.()'"!:@]/g,
-            lower: true,
-            strict: false
-        });
-        res.header('Content-Disposition', `attachment; filename="${title}.mp4"`);
-        ytdl(url, {
-            format: 'mp4',
-            quality: 'highest'
-        }).pipe(res);
-
-    } catch (err) {
-        console.error(err);
-    }
 });
 
 // app.get('*', (req, res) => {
