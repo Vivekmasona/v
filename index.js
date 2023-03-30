@@ -34,7 +34,7 @@ app.get("/get", async (req, res) => {
   res.send({ title, thumbnail, audioFormats, formats });
 });
 
-app.get("/download", async (req, res) => {
+app.get("/video", async (req, res) => {
   const url = req.query.url;
   const itag = req.query.itag;
   const type = req.query.type;
